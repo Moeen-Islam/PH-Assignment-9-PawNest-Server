@@ -30,6 +30,45 @@ async function startServer() {
     res.json({ message: "Logged out successfully" });
   });
 
+    // Pets routes
+  app.get("/api/pets", async (req, res) => {
+    try {
+      const { search, species, sort, limit } = req.query;
+
+      const query: any = {};
+
+      if (search) {
+        query.name = { $regex: String(search), $options: "i" };
+      }
+
+      if (species && species !== "All") {
+        query.species = { $in: String(species).split(",") };
+      }
+
+      let cursor = petsCollection.find(query);
+
+      if (sort === "fee-asc") {
+        cursor = cursor.sort({ adoptionFee: 1 });
+      }
+
+      if (sort === "fee-desc") {
+        cursor = cursor.sort({ adoptionFee: -1 });
+      }
+
+      if (sort === "newest") {
+        cursor = cursor.sort({ createdAt: -1 });
+      }
+
+      if (limit) {
+        cursor = cursor.limit(Number(limit));
+      }
+
+      const pets = await cursor.toArray();
+      res.json(pets);
+    } catch (error) {
+      res.status(500).json({ error: "Failed to load pets" });
+    }
+  });
 
 
 
