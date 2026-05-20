@@ -5,7 +5,7 @@ import jwt from "jsonwebtoken";
 import cookieParser from "cookie-parser";
 import dotenv from "dotenv";
 import cors from "cors";
-import { MongoClient, ObjectId } from "mongodb";
+import { MongoClient, ObjectId, Db, Collection } from "mongodb";
 
 dotenv.config();
 
@@ -16,7 +16,7 @@ const JWT_SECRET = process.env.JWT_SECRET || "default_pet_adoption_secret";
 const MONGODB_URI = process.env.MONGODB_URI;
 
 if (!MONGODB_URI) {
-  throw new Error("MONGODB_URI is missing in server/.env");
+  throw new Error("MONGODB_URI is missing in environment configurations");
 }
 
 const app = express();
@@ -25,7 +25,7 @@ const app = express();
 const allowedOrigins = [
   "http://localhost:5173", 
   "http://localhost:3000",
-  process.env.CLIENT_URL // Make sure to add your deployed frontend Vercel URL to your .env
+  process.env.CLIENT_URL
 ].filter(Boolean) as string[];
 
 app.use(
@@ -44,38 +44,28 @@ app.use(
 app.use(express.json());
 app.use(cookieParser());
 
-// Database connection reuse layout
+// Serverless-safe Database Connection Strategy
 let mongoClient: MongoClient | null = null;
-let db: any = null;
-let petsCollection: any = null;
-let requestsCollection: any = null;
+let cachedDb: Db | null = null;
 
-async function connectDb() {
-  if (db) return { petsCollection, requestsCollection };
-  
+async function getCollections(): Promise<{ petsCollection: Collection; requestsCollection: Collection }> {
   if (!mongoClient) {
     mongoClient = new MongoClient(MONGODB_URI!);
     await mongoClient.connect();
   }
-  db = mongoClient.db("pawnest");
-  petsCollection = db.collection("pets");
-  requestsCollection = db.collection("requests");
-  return { petsCollection, requestsCollection };
+  if (!cachedDb) {
+    cachedDb = mongoClient.db("pawnest");
+  }
+  
+  return {
+    petsCollection: cachedDb.collection("pets"),
+    requestsCollection: cachedDb.collection("requests")
+  };
 }
 
-// Global Database injection Middleware
-app.use(async (req, res, next) => {
-  try {
-    const collections = await connectDb();
-    req.body.collections = collections; // optional utility attachment
-    next();
-  } catch (error) {
-    res.status(500).json({ error: "Database connection failed" });
-  }
-});
-
+// System Health Route
 app.get("/api/health", (req, res) => {
-  res.json({ status: "ok", environment: process.env.NODE_ENV });
+  res.json({ status: "ok", environment: process.env.NODE_ENV || "development" });
 });
 
 // Auth routes
@@ -87,8 +77,8 @@ app.post("/api/auth/login", (req, res) => {
 
   res.cookie("token", token, {
     httpOnly: true,
-    secure: true, // Always true for modern secure cross-site cookies
-    sameSite: "none", // Allows your frontend domain to read cookie credentials across origins
+    secure: true, 
+    sameSite: "none", 
     maxAge: 7 * 24 * 60 * 60 * 1000,
   });
 
@@ -115,6 +105,7 @@ app.get("/api/auth/user", (req, res) => {
 // Pets routes
 app.get("/api/pets", async (req, res) => {
   try {
+    const { petsCollection } = await getCollections();
     const { search, species, sort, sortBy, sortOrder, limit, ownerEmail } = req.query;
     const query: any = {};
 
@@ -138,12 +129,14 @@ app.get("/api/pets", async (req, res) => {
     const pets = await cursor.toArray();
     res.json(pets);
   } catch (error) {
-    res.status(500).json({ error: "Failed to load pets" });
+    console.error("Error fetching pets database entry layout:", error);
+    res.status(500).json({ error: "Failed to load pets from server" });
   }
 });
 
 app.get("/api/pets/:id", async (req, res) => {
   try {
+    const { petsCollection } = await getCollections();
     const pet = await petsCollection.findOne({ _id: new ObjectId(req.params.id) });
     if (!pet) return res.status(404).json({ error: "Pet not found" });
     res.json(pet);
@@ -154,6 +147,7 @@ app.get("/api/pets/:id", async (req, res) => {
 
 app.post("/api/pets", async (req, res) => {
   try {
+    const { petsCollection } = await getCollections();
     const pet = {
       ...req.body,
       status: req.body.status || "available",
@@ -168,6 +162,7 @@ app.post("/api/pets", async (req, res) => {
 
 app.patch("/api/pets/:id", async (req, res) => {
   try {
+    const { petsCollection } = await getCollections();
     const result = await petsCollection.updateOne(
       { _id: new ObjectId(req.params.id) },
       { $set: req.body }
@@ -180,6 +175,7 @@ app.patch("/api/pets/:id", async (req, res) => {
 
 app.delete("/api/pets/:id", async (req, res) => {
   try {
+    const { petsCollection } = await getCollections();
     const result = await petsCollection.deleteOne({ _id: new ObjectId(req.params.id) });
     res.json(result);
   } catch {
@@ -190,6 +186,7 @@ app.delete("/api/pets/:id", async (req, res) => {
 // Requests routes
 app.get("/api/requests", async (req, res) => {
   try {
+    const { requestsCollection } = await getCollections();
     const { email, ownerEmail, petId } = req.query;
     const query: any = {};
 
@@ -199,13 +196,15 @@ app.get("/api/requests", async (req, res) => {
 
     const requests = await requestsCollection.find(query).sort({ requestDate: -1 }).toArray();
     res.json(requests);
-  } catch {
-    res.status(500).json({ error: "Failed to load requests" });
+  } catch (error) {
+    console.error("Requests extraction endpoint layout failure:", error);
+    res.status(500).json({ error: "Failed to load requests from system engine" });
   }
 });
 
 app.post("/api/requests", async (req, res) => {
   try {
+    const { petsCollection, requestsCollection } = await getCollections();
     const { petId, userEmail, ownerEmail } = req.body;
     if (userEmail === ownerEmail) {
       return res.status(403).json({ error: "Pet owners cannot adopt their own pets" });
@@ -233,6 +232,7 @@ app.post("/api/requests", async (req, res) => {
 
 app.patch("/api/requests/:id", async (req, res) => {
   try {
+    const { petsCollection, requestsCollection } = await getCollections();
     const { status, petId } = req.body;
 
     if (status === "approved") {
@@ -252,6 +252,7 @@ app.patch("/api/requests/:id", async (req, res) => {
 
 app.delete("/api/requests/:id", async (req, res) => {
   try {
+    const { requestsCollection } = await getCollections();
     const result = await requestsCollection.deleteOne({ _id: new ObjectId(req.params.id) });
     res.json(result);
   } catch {
