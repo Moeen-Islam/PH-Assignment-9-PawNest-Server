@@ -5,14 +5,13 @@
     "breed": "Golden Retriever",
     "age": 2,
     "gender": "Female",
-    "imageUrl": "https://images.unsplash.com/photo-1552053831-71594a27632d",
+    "imageUrl": "https://images.unsplash.com/photo-1552053831-71594a27632d?auto=format&fit=crop&w=900&q=80",
     "healthStatus": "Healthy",
     "vaccinationStatus": "Fully Vaccinated",
     "location": "Dhaka",
     "adoptionFee": 2500,
     "description": "Luna is playful, gentle, and loves children.",
-    "status": "available",
-    "ownerEmail": "shelter@pawnest.com"
+    "status": "available"
   },
   {
     "name": "Milo",
@@ -20,14 +19,13 @@
     "breed": "Persian",
     "age": 1,
     "gender": "Male",
-    "imageUrl": "https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba",
+    "imageUrl": "https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?auto=format&fit=crop&w=900&q=80",
     "healthStatus": "Healthy",
     "vaccinationStatus": "Fully Vaccinated",
     "location": "Chattogram",
     "adoptionFee": 1800,
     "description": "Milo enjoys quiet homes and warm laps.",
-    "status": "available",
-    "ownerEmail": "shelter@pawnest.com"
+    "status": "available"
   },
   {
     "name": "Kiwi",
@@ -35,14 +33,13 @@
     "breed": "Budgerigar",
     "age": 1,
     "gender": "Female",
-    "imageUrl": "https://images.unsplash.com/photo-1522926193341-e9ffd686c60f",
+    "imageUrl": "https://images.unsplash.com/photo-1522926193341-e9ffd686c60f?auto=format&fit=crop&w=900&q=80",
     "healthStatus": "Healthy",
     "vaccinationStatus": "Not Required",
     "location": "Sylhet",
     "adoptionFee": 900,
     "description": "Kiwi is social, bright, and easy to care for.",
-    "status": "available",
-    "ownerEmail": "shelter@pawnest.com"
+    "status": "available"
   },
   {
     "name": "Snowy",
@@ -50,14 +47,13 @@
     "breed": "Netherland Dwarf",
     "age": 2,
     "gender": "Male",
-    "imageUrl": "https://images.unsplash.com/photo-1585110396000-c9ffd4e4b308",
+    "imageUrl": "https://images.unsplash.com/photo-1585110396000-c9ffd4e4b308?auto=format&fit=crop&w=900&q=80",
     "healthStatus": "Healthy",
     "vaccinationStatus": "Partially Vaccinated",
     "location": "Rajshahi",
     "adoptionFee": 1200,
     "description": "Snowy is calm and perfect for apartment living.",
-    "status": "available",
-    "ownerEmail": "shelter@pawnest.com"
+    "status": "available"
   },
   {
     "name": "Rocky",
@@ -65,14 +61,13 @@
     "breed": "German Shepherd",
     "age": 3,
     "gender": "Male",
-    "imageUrl": "https://images.unsplash.com/photo-1589941013453-ec89f33b5e95",
+    "imageUrl": "https://images.unsplash.com/photo-1589941013453-ec89f33b5e95?auto=format&fit=crop&w=900&q=80",
     "healthStatus": "Healthy",
     "vaccinationStatus": "Fully Vaccinated",
     "location": "Khulna",
     "adoptionFee": 3000,
     "description": "Rocky is loyal, trained, and protective.",
-    "status": "available",
-    "ownerEmail": "shelter@pawnest.com"
+    "status": "available"
   },
   {
     "name": "Bella",
@@ -80,14 +75,13 @@
     "breed": "Siamese",
     "age": 2,
     "gender": "Female",
-    "imageUrl": "https://images.unsplash.com/photo-1574158622682-e40e69881006",
+    "imageUrl": "https://images.unsplash.com/photo-1574158622682-e40e69881006?auto=format&fit=crop&w=900&q=80",
     "healthStatus": "Healthy",
     "vaccinationStatus": "Fully Vaccinated",
     "location": "Dhaka",
     "adoptionFee": 2000,
     "description": "Bella is curious, affectionate, and tidy.",
-    "status": "available",
-    "ownerEmail": "shelter@pawnest.com"
+    "status": "available"
   },
   {
     "name": "Daisy",
@@ -95,14 +89,13 @@
     "breed": "Beagle",
     "age": 2,
     "gender": "Female",
-    "imageUrl": "https://images.unsplash.com/photo-1537151608828-ea2b11777ee8",
+    "imageUrl": "https://images.unsplash.com/photo-1537151608828-ea2b11777ee8?auto=format&fit=crop&w=900&q=80",
     "healthStatus": "Healthy",
     "vaccinationStatus": "Fully Vaccinated",
     "location": "Barishal",
     "adoptionFee": 2200,
     "description": "Daisy is a scent hound with a big heart, always curious and friendly.",
-    "status": "available",
-    "ownerEmail": "shelter@pawnest.com"
+    "status": "available"
   },
   {
     "name": "Oliver",
@@ -110,14 +103,13 @@
     "breed": "Tabby",
     "age": 3,
     "gender": "Male",
-    "imageUrl": "https://images.unsplash.com/photo-1533738363-b7f9aef128ce",
+    "imageUrl": "https://images.unsplash.com/photo-1533738363-b7f9aef128ce?auto=format&fit=crop&w=900&q=80",
     "healthStatus": "Healthy",
     "vaccinationStatus": "Fully Vaccinated",
     "location": "Dhaka",
     "adoptionFee": 1500,
     "description": "Oliver is a quiet observer who loves sunny spots and soft blankets.",
-    "status": "available",
-    "ownerEmail": "shelter@pawnest.com"
+    "status": "available"
   },
   {
     "name": "Pip",
@@ -125,14 +117,13 @@
     "breed": "Hamster",
     "age": 1,
     "gender": "Male",
-    "imageUrl": "https://images.unsplash.com/photo-1548767797-d933be75e1f0",
+    "imageUrl": "https://images.unsplash.com/photo-1425082661705-1834bfd09dca?auto=format&fit=crop&w=900&q=80",
     "healthStatus": "Healthy",
     "vaccinationStatus": "Not Required",
     "location": "Gazipur",
     "adoptionFee": 500,
     "description": "Pip is tiny, energetic, and loves running on his wheel all night.",
-    "status": "available",
-    "ownerEmail": "shelter@pawnest.com"
+    "status": "available"
   },
   {
     "name": "Shadow",
@@ -140,13 +131,12 @@
     "breed": "Black Labrador",
     "age": 4,
     "gender": "Male",
-    "imageUrl": "https://images.unsplash.com/photo-1444212477490-ca40a0a50135",
+    "imageUrl": "https://images.unsplash.com/photo-1530281700549-e82e7bf110d6?auto=format&fit=crop&w=900&q=80",
     "healthStatus": "Healthy",
     "vaccinationStatus": "Fully Vaccinated",
     "location": "Cumilla",
     "adoptionFee": 2800,
     "description": "Shadow is a loyal companion, excellent swimmer, and very well-behaved.",
-    "status": "available",
-    "ownerEmail": "shelter@pawnest.com"
+    "status": "available"
   }
 ]

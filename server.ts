@@ -89,43 +89,56 @@ async function startServer() {
 
   // Pets routes
   app.get("/api/pets", async (req, res) => {
-    try {
-      const { search, species, sort, limit } = req.query;
+  try {
+    const { search, species, sort, sortBy, sortOrder, limit, ownerEmail } =
+      req.query;
 
-      const query: any = {};
+    const query: any = {};
 
-      if (search) {
-        query.name = { $regex: String(search), $options: "i" };
-      }
-
-      if (species && species !== "All") {
-        query.species = { $in: String(species).split(",") };
-      }
-
-      let cursor = petsCollection.find(query);
-
-      if (sort === "fee-asc") {
-        cursor = cursor.sort({ adoptionFee: 1 });
-      }
-
-      if (sort === "fee-desc") {
-        cursor = cursor.sort({ adoptionFee: -1 });
-      }
-
-      if (sort === "newest") {
-        cursor = cursor.sort({ createdAt: -1 });
-      }
-
-      if (limit) {
-        cursor = cursor.limit(Number(limit));
-      }
-
-      const pets = await cursor.toArray();
-      res.json(pets);
-    } catch (error) {
-      res.status(500).json({ error: "Failed to load pets" });
+    if (ownerEmail) {
+      query.ownerEmail = String(ownerEmail);
     }
-  });
+
+    if (search) {
+      query.name = { $regex: String(search), $options: "i" };
+    }
+
+    if (species && species !== "All") {
+      query.species = { $in: String(species).split(",") };
+    }
+
+    let cursor = petsCollection.find(query);
+
+    if (sort === "fee-asc") cursor = cursor.sort({ adoptionFee: 1 });
+    if (sort === "fee-desc") cursor = cursor.sort({ adoptionFee: -1 });
+    if (sort === "newest") cursor = cursor.sort({ createdAt: -1 });
+
+    if (sortBy === "name") {
+      cursor = cursor.sort({ name: sortOrder === "asc" ? 1 : -1 });
+    }
+
+    if (sortBy === "adoptionFee") {
+      cursor = cursor.sort({ adoptionFee: sortOrder === "asc" ? 1 : -1 });
+    }
+
+    if (sortBy === "age") {
+      cursor = cursor.sort({ age: sortOrder === "asc" ? 1 : -1 });
+    }
+
+    if (sortBy === "createdAt") {
+      cursor = cursor.sort({ createdAt: sortOrder === "asc" ? 1 : -1 });
+    }
+
+    if (limit) {
+      cursor = cursor.limit(Number(limit));
+    }
+
+    const pets = await cursor.toArray();
+    res.json(pets);
+  } catch (error) {
+    res.status(500).json({ error: "Failed to load pets" });
+  }
+});
 
   app.get("/api/pets/:id", async (req, res) => {
     try {
