@@ -30,7 +30,7 @@ const allowedOrigins = [
 
 app.use(
   cors({
-    origin: (origin, callback) => {
+    origin: (origin: string | undefined, callback: (err: Error | null, allow?: boolean) => void) => {
       if (!origin || allowedOrigins.indexOf(origin) !== -1) {
         callback(null, true);
       } else {
@@ -261,3 +261,10 @@ app.delete("/api/requests/:id", async (req, res) => {
 
 // CRITICAL EXPORT FOR VERCEL SERVERLESS ENGINE
 export default app;
+
+if (process.env.NODE_ENV !== "production") {
+  const LOCAL_PORT = process.env.PORT || 3001;
+  app.listen(LOCAL_PORT, () => {
+    console.log(`[Local Dev] Server is running on http://localhost:${LOCAL_PORT}`);
+  });
+}
